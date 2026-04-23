@@ -9,7 +9,7 @@ class Database
 {
     private static ?PDO $instance = null;
 
-    private static function getInstance(): PDO
+    public static function getInstance(): PDO
     {
         if (self::$instance === null) {
             $cfg = require ROOT_PATH . '/config/database.php';

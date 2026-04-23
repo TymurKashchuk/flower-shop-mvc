@@ -6,13 +6,13 @@ class Response
 {
     private static int $statusCode = 200;
 
-    private static function setStatus(int $code): void
+    public static function setStatus(int $code): void
     {
         self::$statusCode = $code;
         http_response_code($code);
     }
 
-    private static function getStatus(): int
+    public static function getStatus(): int
     {
         return self::$statusCode;
     }
