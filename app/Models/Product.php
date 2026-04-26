@@ -129,4 +129,25 @@ class Product extends Model
             $id,
         ]);
     }
+
+    public function getPaginated(int $page = 1, int $perPage = 9): array
+    {
+        $offset = ($page - 1) * $perPage;
+        $stmt   = $this->db->prepare("
+        SELECT p.*, c.name AS category_name, c.slug AS category_slug
+        FROM {$this->table} p
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.is_active = 1
+        ORDER BY p.created_at DESC
+        LIMIT ? OFFSET ?
+    ");
+        $stmt->execute([$perPage, $offset]);
+        return $stmt->fetchAll();
+    }
+
+    public function countActive(): int
+    {
+        $stmt = $this->db->query("SELECT COUNT(*) FROM {$this->table} WHERE is_active = 1");
+        return (int) $stmt->fetchColumn();
+    }
 }
