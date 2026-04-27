@@ -74,11 +74,7 @@ class Router
     private function handle404(): void
     {
         Response::notFound();
-        $viewFile = APP_PATH . '/Views/errors/404.php';
-        if (file_exists($viewFile)) {
-            require $viewFile;
-        } else {
-            echo '<h1>404 — Сторінку не знайдено</h1>';
-        }
+        $controller = new \app\Controllers\ErrorController($this->request);
+        $controller->notFound();
     }
 }
