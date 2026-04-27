@@ -29,12 +29,9 @@ set_exception_handler(function (Throwable $e): void {
 
     \core\Response::serverError();
 
-    $errorView = APP_PATH . '/Views/errors/500.php';
-    if (file_exists($errorView)) {
-        require $errorView;
-    } else {
-        echo '<h1>500 — Помилка сервера</h1>';
-    }
+    $request = new \core\Request();
+    $controller = new \app\Controllers\ErrorController($request);
+    $controller->serverError();
     exit;
 });
 
