@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>500</title></head>
 <body>
-<h1>500 — Помилка сервера</h1>
-<a href="<?= BASE_URL ?>">На головну</a>
-</body>
+<div class="error-page">
+    <h1 class="error-page__code">500</h1>
+    <p class="error-page__message">Помилка сервера</p>
+    <a href="<?= BASE_URL ?>" class="btn btn-primary">На головну</a>
+</div>
 </html>
