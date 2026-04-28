@@ -93,12 +93,6 @@ class ProductRepository
 
     public function getFeaturedProducts(int $limit = 8): array
     {
-        return $this->product->db()
-            ->select('products.*, categories.name as category_name')
-            ->join('categories', 'products.category_id = categories.id')
-            ->where('products.is_active', 1)
-            ->orderBy('products.created_at', 'DESC')
-            ->limit($limit)
-            ->get();
+        return $this->product->getFeatured($limit);
     }
 }

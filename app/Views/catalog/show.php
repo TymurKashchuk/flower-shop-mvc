@@ -108,8 +108,8 @@
 
             <!-- Наявність -->
             <p class="product-page__stock
-                <?= !empty($product['in_stock']) ? 'product-page__stock--in' : 'product-page__stock--out' ?>">
-                <?php if (!empty($product['in_stock'])): ?>
+                <?= ($product['stock'] ?? 0) > 0 ? 'product-page__stock--in' : 'product-page__stock--out' ?>">
+                <?php if (($product['stock'] ?? 0) > 0): ?>
                     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
                         circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
                         <path d="M6.5 10l2.5 2.5 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"

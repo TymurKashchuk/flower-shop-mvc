@@ -150,4 +150,18 @@ class Product extends Model
         $stmt = $this->db->query("SELECT COUNT(*) FROM {$this->table} WHERE is_active = 1");
         return (int) $stmt->fetchColumn();
     }
+
+    public function getFeatured(int $limit = 8): array
+    {
+        $stmt = $this->db->prepare("
+        SELECT p.*, c.name AS category_name, c.slug AS category_slug
+        FROM {$this->table} p
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.is_active = 1
+        ORDER BY p.created_at DESC
+        LIMIT ?
+        ");
+        $stmt->execute([$limit]);
+        return $stmt->fetchAll();
+    }
 }
