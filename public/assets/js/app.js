@@ -191,8 +191,60 @@ function initCart() {
     });
 }
 
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.classList.add('toast--visible'), 10);
+    setTimeout(() => {
+        toast.classList.remove('toast--visible');
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
+}
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.classList.add('toast--visible'), 10);
+    setTimeout(() => {
+        toast.classList.remove('toast--visible');
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
+}
+
+function initAddToCart() {
+    const form = document.getElementById('add-to-cart-form');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        fetch(BASE_URL + '/cart/add', {
+            method: 'POST',
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            body: formData,
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) return;
+
+                const countEl = document.querySelector('.cart-count');
+                if (countEl) countEl.textContent = data.count;
+
+                showToast(data.message ?? 'Товар додано до кошика');
+            })
+            .catch(() => alert('Помилка. Спробуйте ще раз.'));
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initProductPage();
     initSearch();
     initCart();
+    initAddToCart();
 });
