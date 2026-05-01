@@ -63,7 +63,11 @@
                     <path d="M3 6h18M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.5"
                           stroke-linecap="round"/>
                 </svg>
-                <span class="cart-count" aria-live="polite">0</span>
+                <?php
+                $cart = new \app\Models\Cart();
+                $cartCount = $cart->countItems(session_id());
+                ?>
+                <span class="cart-count" aria-live="polite"><?= $cartCount ?></span>
             </a>
 
             <!-- Авторизація -->
