@@ -29,7 +29,8 @@ class Buffer
             self::saveToCache(self::$cacheKey, $content);
         }
 
-        ob_end_flush();
+        ob_end_clean();
+        echo $content;
     }
 
     public static function clearCache(string $key = ''): void{

@@ -28,6 +28,10 @@ class Request
         return $_GET[$key] ?? $default;
     }
 
+    public function post(string $key, mixed $default = null) :mixed
+    {
+        return $_POST[$key] ?? $default;
+    }
     public function file(string $key) :?array{
         return $_FILES[$key] ?? null;
     }
