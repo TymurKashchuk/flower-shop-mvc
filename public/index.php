@@ -12,13 +12,15 @@ define('CACHE_TTL', 3600);
 
 spl_autoload_register(function (string $class): void {
     $file = ROOT_PATH . '/' . str_replace('\\', '/', $class) . '.php';
-
     if (file_exists($file)) {
         require_once $file;
     }
 });
 
 set_exception_handler(function (Throwable $e): void {
+    if (ob_get_level() > 0) {
+        ob_end_clean();
+    }
     error_log(
         '[Error] ' . $e->getMessage() .
         ' in ' . $e->getFile() .
@@ -26,9 +28,7 @@ set_exception_handler(function (Throwable $e): void {
         3,
         LOG_PATH . '/error.log'
     );
-
     \core\Response::serverError();
-
     $request = new \core\Request();
     $controller = new \app\Controllers\ErrorController($request);
     $controller->serverError();
@@ -36,13 +36,18 @@ set_exception_handler(function (Throwable $e): void {
 });
 
 $request = new \core\Request();
-
-$cacheKey = $request->method . ":" . $request->uri;
-\core\Buffer::start($cacheKey);
-
-$router = new \core\Router($request);
+$router  = new \core\Router($request);
 require ROOT_PATH . '/config/routes.php';
 
-$router->run();
+$noCache = $request->method !== 'GET'
+    || str_starts_with($request->uri, 'cart')
+    || str_starts_with($request->uri, 'checkout');
 
-\core\Buffer::end();
+if ($noCache) {
+    $router->run();
+} else {
+    $cacheKey = $request->method . ':' . $request->uri;
+    \core\Buffer::start($cacheKey);
+    $router->run();
+    \core\Buffer::end();
+}
