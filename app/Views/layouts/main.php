@@ -65,20 +65,71 @@
                 </svg>
                 <?php
                 $cart = new \app\Models\Cart();
-                $cartCount = $cart->countItems(session_id());
+                $userId = $_SESSION['user']['id'] ?? null;
+                $cartCount = $cart->countItems(session_id(), $userId);
                 ?>
                 <span class="cart-count" aria-live="polite"><?= $cartCount ?></span>
             </a>
 
             <!-- Авторизація -->
             <?php if (!empty($_SESSION['user'])): ?>
-                <span class="user-name">
-                    <?= htmlspecialchars($_SESSION['user']['name']) ?>
+                <div class="user-menu">
+                    <button class="user-menu__trigger" type="button" aria-expanded="false" aria-haspopup="true"
+                            aria-label="Меню профілю">
+                        <div class="user-menu__avatar">
+                            <?= mb_strtoupper(mb_substr($_SESSION['user']['name'], 0, 1)) ?>
+                        </div>
+                        <span class="user-menu__name"><?= htmlspecialchars($_SESSION['user']['name']) ?></span>
+                        <svg class="user-menu__chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+
+                    <div class="user-menu__dropdown">
+                        <div class="user-menu__info">
+                            <span class="user-menu__info-name"><?= htmlspecialchars($_SESSION['user']['name']) ?></span>
+                            <span class="user-menu__info-role">
+                    <?= $_SESSION['user']['role'] === 'admin' ? 'Адміністратор' : 'Користувач' ?>
                 </span>
-                <?php if ($_SESSION['user']['role'] === 'admin'): ?>
-                    <a href="<?= BASE_URL ?>/admin" class="btn btn-admin">Адмінка</a>
-                <?php endif; ?>
-                <a href="<?= BASE_URL ?>/logout" class="btn btn-ghost">Вийти</a>
+                        </div>
+
+                        <div class="user-menu__divider"></div>
+
+                        <a href="<?= BASE_URL ?>/profile" class="user-menu__item">
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M10 10a3 3 0 100-6 3 3 0 000 6zM4 17a6 6 0 1112 0" stroke="currentColor"
+                                      stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                            Профіль
+                        </a>
+
+                        <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+                            <a href="<?= BASE_URL ?>/admin" class="user-menu__item">
+                                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                    <rect x="3" y="3" width="6" height="6" rx="1" stroke="currentColor"
+                                          stroke-width="1.5"/>
+                                    <rect x="11" y="3" width="6" height="6" rx="1" stroke="currentColor"
+                                          stroke-width="1.5"/>
+                                    <rect x="3" y="11" width="6" height="6" rx="1" stroke="currentColor"
+                                          stroke-width="1.5"/>
+                                    <rect x="11" y="11" width="6" height="6" rx="1" stroke="currentColor"
+                                          stroke-width="1.5"/>
+                                </svg>
+                                Адмін-панель
+                            </a>
+                        <?php endif; ?>
+
+                        <a href="<?= BASE_URL ?>/logout" class="user-menu__item user-menu__item--danger">
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                <path d="M7 3H4a1 1 0 00-1 1v12a1 1 0 001 1h3M13 14l3-4-3-4M16 10H7"
+                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                            </svg>
+                            Вийти
+                        </a>
+                    </div>
+                </div>
             <?php else: ?>
                 <a href="<?= BASE_URL ?>/login" class="btn btn-ghost">Увійти</a>
                 <a href="<?= BASE_URL ?>/register" class="btn btn-primary">Реєстрація</a>
@@ -91,7 +142,7 @@
     <div class="container">
 
         <?php if (!empty($_SESSION['success'])): ?>
-            <div class="alert alert-success" role="alert">
+            <div class="alert alert-success">
                 <?= htmlspecialchars($_SESSION['success']) ?>
             </div>
             <?php unset($_SESSION['success']); ?>

@@ -30,7 +30,7 @@
                         name="email"
                         class="form-input"
                         value="<?= htmlspecialchars($old['email'] ?? '') ?>"
-                        autocomplete="email"
+                        autocomplete="off"
                         required
                 >
                 <?php if (!empty($errors['email'])): ?>
