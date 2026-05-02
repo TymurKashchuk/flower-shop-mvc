@@ -41,7 +41,14 @@ require ROOT_PATH . '/config/routes.php';
 
 $noCache = $request->method !== 'GET'
     || str_starts_with($request->uri, 'cart')
-    || str_starts_with($request->uri, 'checkout');
+    || str_starts_with($request->uri, 'checkout')
+    || str_starts_with($request->uri, 'login')
+    || str_starts_with($request->uri, 'register')
+    || str_starts_with($request->uri, 'logout')
+    || str_starts_with($request->uri, 'admin')
+    || str_starts_with($request->uri, 'profile')
+    || !empty($_SESSION['user']);
+
 
 if ($noCache) {
     $router->run();

@@ -27,6 +27,7 @@ class Response
 
     public static function redirect(string $url): void
     {
+        session_write_close();
         header('Location: ' . $url);
         exit;
     }
