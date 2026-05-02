@@ -16,7 +16,7 @@ class User extends Model
 
     public function create(array $data): bool
     {
-        $stmt = $this->db->prepare("INSERT INTO {$this->table} (name,email,password,role) VALUES (?,?,?, 'user')");
+        $stmt = $this->db->prepare("INSERT INTO {$this->table} (name,email,password_hash,role) VALUES (?,?,?, 'user')");
         return $stmt->execute([$data['name'],$data['email'],password_hash($data['password'], PASSWORD_BCRYPT),]);
     }
 
