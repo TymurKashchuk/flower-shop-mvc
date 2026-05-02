@@ -2,6 +2,7 @@
 
 /** @var \core\Router $router */
 
+use app\Controllers\AuthController;
 use app\Controllers\CartController;
 use app\Controllers\HomeController;
 use app\Controllers\CatalogController;
@@ -18,3 +19,10 @@ $router->post('/cart/add', [CartController::class, 'add']);
 $router->post('/cart/update', [CartController::class, 'update']);
 $router->post('/cart/remove', [CartController::class, 'remove']);
 $router->post('/cart/clear', [CartController::class, 'clear']);
+
+//login,register
+$router->get('/login', [AuthController::class, 'loginForm']);
+$router->post('/login', [AuthController::class, 'login']);
+$router->get('/register', [AuthController::class, 'registerForm']);
+$router->post('/register', [AuthController::class, 'register']);
+$router->post('/logout', [AuthController::class, 'logout']);
