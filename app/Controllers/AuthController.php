@@ -52,7 +52,7 @@ class AuthController extends Controller
 
         $user = $this->user->findByEmail($email);
 
-        if (!$user || !password_verify($password, $user['password'])) {
+        if (!$user || !password_verify($password, $user['password_hash'])) {
             $this->back(['email' => 'Невірний email або пароль'], ['email' => $email]);
             return;
         }
@@ -62,6 +62,10 @@ class AuthController extends Controller
             'name' => $user['name'],
             'role' => $user['role'],
         ];
+
+        $cart = new \app\Models\Cart();
+        $cart->mergeSessionToUser(session_id(), $user['id']);
+        session_regenerate_id(true);
 
         $this->redirect($user['role'] === 'admin' ? BASE_URL . '/admin' : BASE_URL . '/');
     }
@@ -118,6 +122,9 @@ class AuthController extends Controller
             'name' => $user['name'],
             'role' => $user['role'],
         ];
+        $cart = new \app\Models\Cart();
+        $cart->mergeSessionToUser(session_id(), $user['id']);
+        session_regenerate_id(true);
 
         $_SESSION['success'] = 'Ласкаво просимо, ' . $name . '!';
         $this->redirect(BASE_URL . '/');
@@ -125,8 +132,19 @@ class AuthController extends Controller
 
     public function logout(): void
     {
+        $cart = new \app\Models\Cart();
+        $cart->clearGuestSession(session_id());
+
         $_SESSION = [];
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
         session_destroy();
-        $this->redirect(BASE_URL . '/login');
+        header('Location: ' . BASE_URL . '/login');
+        exit;
     }
 }
