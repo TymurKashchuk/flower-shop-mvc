@@ -13,6 +13,7 @@ class CartController extends Controller
     private Cart $cart;
     private Product $product;
     private string $sessionId;
+    private ?int $userId = null;
 
     public function __construct(Request $request)
     {
@@ -20,17 +21,25 @@ class CartController extends Controller
         $this->cart = new Cart();
         $this->product = new Product();
         $this->sessionId = session_id();
+        $this->userId = $_SESSION['user']['id'] ?? null;
     }
 
     public function index(): void
     {
-        $items = $this->cart->getBySession($this->sessionId);
+        $items = $this->cart->getBySession($this->sessionId, $this->userId);
         $total = $this->calculateTotal($items);
 
         $this->view('cart.index', [
             'title' => 'Кошик',
             'items' => $items,
             'total' => $total,
+        ]);
+    }
+
+    public function count(): void
+    {
+        Response::json([
+            'count' => $this->cart->countItems($this->sessionId, $this->userId),
         ]);
     }
 
@@ -55,12 +64,12 @@ class CartController extends Controller
 
         $quantity = min($quantity, $product['stock']);
 
-        $this->cart->addItem($this->sessionId, $productId, $quantity);
+        $this->cart->addItem($this->sessionId, $productId, $quantity, $this->userId);
 
         if ($this->request->isAjax()) {
             Response::json([
                 'success' => true,
-                'count' => $this->cart->countItems($this->sessionId),
+                'count' => $this->cart->countItems($this->sessionId, $this->userId),
                 'message' => 'Товар додано до кошика',
             ]);
             return;
@@ -76,25 +85,24 @@ class CartController extends Controller
         $quantity = (int)$this->request->post('quantity');
 
         if ($quantity < 1) {
-            $this->cart->removeItem($itemId, $this->sessionId);
+            $this->cart->removeItem($itemId, $this->sessionId, $this->userId);
         } else {
-            $cartItems = $this->cart->getBySession($this->sessionId);
-            $cartItem = array_filter($cartItems, fn($i) => $i['id'] === $itemId);
-            $cartItem = array_values($cartItem)[0] ?? null;
+            $cartItems = $this->cart->getBySession($this->sessionId, $this->userId);
+            $cartItem = array_values(array_filter($cartItems, fn($i) => $i['id'] === $itemId))[0] ?? null;
 
             if ($cartItem) {
                 $product = $this->product->find($cartItem['product_id']);
                 $quantity = min($quantity, $product['stock'] ?? $quantity);
             }
 
-            $this->cart->updateQuantity($itemId, $this->sessionId, $quantity);
+            $this->cart->updateQuantity($itemId, $this->sessionId, $quantity, $this->userId);
         }
 
         if ($this->request->isAjax()) {
-            $items = $this->cart->getBySession($this->sessionId);
+            $items = $this->cart->getBySession($this->sessionId, $this->userId);
             Response::json([
                 'success' => true,
-                'count' => $this->cart->countItems($this->sessionId),
+                'count' => $this->cart->countItems($this->sessionId, $this->userId),
                 'total' => number_format($this->calculateTotal($items), 2, '.', ' '),
             ]);
             return;
@@ -106,13 +114,13 @@ class CartController extends Controller
     public function remove(): void
     {
         $itemId = (int)$this->request->post('item_id');
-        $this->cart->removeItem($itemId, $this->sessionId);
+        $this->cart->removeItem($itemId, $this->sessionId, $this->userId);
 
         if ($this->request->isAjax()) {
-            $items = $this->cart->getBySession($this->sessionId);
+            $items = $this->cart->getBySession($this->sessionId, $this->userId);
             Response::json([
                 'success' => true,
-                'count' => $this->cart->countItems($this->sessionId),
+                'count' => $this->cart->countItems($this->sessionId, $this->userId),
                 'total' => number_format($this->calculateTotal($items), 2, '.', ' '),
             ]);
             return;
@@ -124,7 +132,7 @@ class CartController extends Controller
 
     public function clear(): void
     {
-        $this->cart->clearSession($this->sessionId);
+        $this->cart->clearSession($this->sessionId, $this->userId);
 
         $_SESSION['success'] = 'Кошик очищено.';
         $this->redirect(BASE_URL . '/cart');
