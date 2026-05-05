@@ -27,3 +27,6 @@ $router->post('/login', [AuthController::class, 'login']);
 $router->get('/register', [AuthController::class, 'registerForm']);
 $router->post('/register', [AuthController::class, 'register']);
 $router->get('/logout', [AuthController::class, 'logout']);
+
+$router->get('/profile', [\app\Controllers\ProfileController::class, 'index']);
+$router->post('profile/update', [\app\Controllers\ProfileController::class, 'update']);

@@ -1373,3 +1373,17 @@ a {
 .user-menu__item--danger:hover {
     background: var(--color-error-highlight);
 }
+
+.profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-full);
+    background: var(--color-pink);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin: 0 auto var(--space-6);
+}
