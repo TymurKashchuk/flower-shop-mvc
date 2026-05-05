@@ -20,11 +20,19 @@ class User extends Model
         return $stmt->execute([$data['name'],$data['email'],password_hash($data['password'], PASSWORD_BCRYPT),]);
     }
 
-    public function emailExists(string $email): bool
+    public function emailExists(string $email,int $excludeId = 0): bool
     {
-        $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} WHERE email = ?");
-        $stmt->execute([$email]);
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} WHERE email = ? AND id != ?");
+        $stmt->execute([$email, $excludeId]);
         return (int)$stmt->fetchColumn() > 0;
     }
 
+    public function updateProfile(int $id, array $data): bool
+    {
+        $fields = implode(', ', array_map(fn($k) => "$k = ?", array_keys($data)));
+        $stmt = $this->db->prepare(
+            "UPDATE {$this->table} SET $fields WHERE id = ?"
+        );
+        return $stmt->execute([...array_values($data), $id]);
+    }
 }
