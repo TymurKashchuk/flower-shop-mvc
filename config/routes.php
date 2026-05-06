@@ -6,6 +6,7 @@ use app\Controllers\AuthController;
 use app\Controllers\CartController;
 use app\Controllers\HomeController;
 use app\Controllers\CatalogController;
+use app\Controllers\NewsController;
 
 $router->get('/', [HomeController::class, 'index']);
 
@@ -29,4 +30,16 @@ $router->post('/register', [AuthController::class, 'register']);
 $router->get('/logout', [AuthController::class, 'logout']);
 
 $router->get('/profile', [\app\Controllers\ProfileController::class, 'index']);
-$router->post('profile/update', [\app\Controllers\ProfileController::class, 'update']);
+$router->post('/profile/update', [\app\Controllers\ProfileController::class, 'update']);
+
+//Публічні
+$router->get('/news', [NewsController::class, 'index']);
+$router->get('/news/{slug}', [NewsController::class, 'show']);
+
+//Адмін
+$router->get('/admin/news', [NewsController::class, 'adminIndex']);
+$router->get('/admin/news/create', [NewsController::class, 'create']);
+$router->post('/admin/news/store', [NewsController::class, 'store']);
+$router->get('/admin/news/{id}/edit', [NewsController::class, 'edit']);
+$router->post('/admin/news/{id}/update', [NewsController::class, 'update']);
+$router->post('/admin/news/{id}/delete', [NewsController::class, 'delete']);

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 session_start();
 
@@ -53,7 +52,7 @@ $noCache = $request->method !== 'GET'
 if ($noCache) {
     $router->run();
 } else {
-    $cacheKey = $request->method . ':' . $request->uri;
+    $cacheKey = $request->method . ':' . $request->uri . ':' . http_build_query($_GET);
     \core\Buffer::start($cacheKey);
     $router->run();
     \core\Buffer::end();
