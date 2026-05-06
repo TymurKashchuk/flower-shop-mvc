@@ -21,16 +21,21 @@ class NewsController extends Controller
     public function index(): void
     {
         $page = max(1, (int)$this->request->get('page', 1));
+        $month = $this->request->get('month') ?: null;
         $perPage = 6;
-        $total = $this->news->countPublished();
-        $items = $this->news->getPaginated($page, $perPage);
+
+        $total = $this->news->countFiltered($month);
+        $items = $this->news->getFiltered($page, $perPage, $month);
         $pages = (int)ceil($total / $perPage);
+        $months = $this->news->getAvailableMonths();
 
         $this->view('news.index', [
             'title' => 'Новини',
             'items' => $items,
             'page' => $page,
             'pages' => $pages,
+            'months' => $months,
+            'month' => $month,
         ]);
     }
 
