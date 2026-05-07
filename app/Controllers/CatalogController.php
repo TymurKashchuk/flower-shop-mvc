@@ -64,12 +64,22 @@ class CatalogController extends Controller
             return;
         }
 
+        $review = new \app\Models\Review();
+        $reviews = $review->getByProduct($product['id']);
+        $avgRating = $review->getAverageRating($product['id']);
+        $hasReviewed = !empty($_SESSION['user'])
+            ? $review->hasReviewed($_SESSION['user']['id'], $product['id'])
+            : false;
+
         $categories = $this->repo->getAllCategories();
 
         $this->view('catalog.show', [
             'title' => $product['name'],
             'product' => $product,
             'categories' => $categories,
+            'reviews' => $reviews,
+            'avgRating' => $avgRating,
+            'hasReviewed' => $hasReviewed,
         ]);
     }
 
