@@ -7,6 +7,7 @@ use app\Controllers\CartController;
 use app\Controllers\HomeController;
 use app\Controllers\CatalogController;
 use app\Controllers\NewsController;
+use app\Controllers\ReviewController;
 
 $router->get('/', [HomeController::class, 'index']);
 
@@ -36,10 +37,18 @@ $router->post('/profile/update', [\app\Controllers\ProfileController::class, 'up
 $router->get('/news', [NewsController::class, 'index']);
 $router->get('/news/{slug}', [NewsController::class, 'show']);
 
-//Адмін
+//Адмін - новини
 $router->get('/admin/news', [NewsController::class, 'adminIndex']);
 $router->get('/admin/news/create', [NewsController::class, 'create']);
 $router->post('/admin/news/store', [NewsController::class, 'store']);
 $router->get('/admin/news/{id}/edit', [NewsController::class, 'edit']);
 $router->post('/admin/news/{id}/update', [NewsController::class, 'update']);
 $router->post('/admin/news/{id}/delete', [NewsController::class, 'delete']);
+
+// Відгуки
+$router->post('/catalog/{slug}/reviews', [ReviewController::class, 'store']);
+
+//Адмін — відгуки
+$router->get('/admin/reviews', [ReviewController::class, 'adminIndex']);
+$router->post('/admin/reviews/{id}/approve', [ReviewController::class, 'approve']);
+$router->post('/admin/reviews/{id}/delete', [ReviewController::class, 'delete']);
