@@ -38,6 +38,15 @@ class News extends Model
         return $stmt->fetch() ?: null;
     }
 
+    public function find(int $id): ?array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM {$this->table} WHERE id = ?"
+        );
+        $stmt->execute([$id]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function allForAdmin(): array
     {
         return $this->db->query("

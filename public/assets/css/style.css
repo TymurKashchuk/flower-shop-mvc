@@ -1553,3 +1553,225 @@ a {
     padding-top: var(--space-8);
     border-top: 1px solid var(--color-border);
 }
+
+
+/* Відгуки*/
+.reviews {
+    margin-top: var(--space-12, 3rem);
+    padding-top: var(--space-8, 2rem);
+    border-top: 1px solid var(--color-border, #e5e7eb);
+}
+
+.reviews__header {
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.reviews__title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.reviews__avg {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    background: #fff0f4;
+    color: #c0335a;
+    border: 1px solid #f5c6d3;
+    border-radius: 999px;
+    padding: 0.2rem 0.75rem;
+}
+
+.reviews__count {
+    font-weight: 400;
+    color: #888;
+    font-size: 0.875rem;
+}
+
+.review-stars {
+    letter-spacing: 0.05em;
+    font-size: 1.05rem;
+}
+
+.review-stars--gold {
+    color: #e8a020;
+    font-size: 1.1rem;
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+}
+
+.review-stars--sm {
+    color: #e8a020;
+    font-size: 0.95rem;
+}
+
+.reviews__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: var(--space-8, 2rem);
+}
+
+.review-card {
+    background: #fff;
+    border: 1px solid #f0e8ed;
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(160, 44, 90, 0.05),
+    0 0 0 0px transparent;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.review-card:hover {
+    box-shadow: 0 4px 16px rgba(160, 44, 90, 0.10);
+    transform: translateY(-1px);
+}
+
+.review-card__head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.75rem;
+}
+
+.review-card__avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    background: linear-gradient(135deg, #e06090, #a0256a);
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(160, 44, 90, 0.25);
+    letter-spacing: 0;
+    line-height: 1;
+}
+
+.review-card__name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    display: block;
+    line-height: 1.3;
+}
+
+.review-card__date {
+    font-size: 0.8125rem;
+    color: #aaa;
+    display: block;
+}
+
+.review-card__head .review-stars--gold {
+    margin-left: auto;
+}
+
+.review-card__text {
+    font-size: 0.9375rem;
+    color: #333;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.reviews__empty,
+.reviews__login,
+.reviews__already {
+    font-size: 0.9375rem;
+    color: #888;
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.reviews__login a {
+    color: #c0335a;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.review-form-wrap {
+    margin-top: var(--space-8, 2rem);
+    padding-top: var(--space-6, 1.5rem);
+    border-top: 1px solid #f0e8ed;
+}
+
+.review-form__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.review-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.review-form .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.1rem;
+    margin-top: 0.25rem;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.12s ease;
+    line-height: 1;
+}
+
+.star-rating input[type="radio"]:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #e8a020;
+}
+
+.star-rating label:hover {
+    transform: scale(1.2);
+}
+
+.review-form .form-input {
+    width: 100%;
+    border: 1px solid #e0d6dc;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    color: #1a1a1a;
+    background: #fff;
+    resize: vertical;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    outline: none;
+}
+
+.review-form .form-input:focus {
+    border-color: #c0335a;
+    box-shadow: 0 0 0 3px rgba(192, 51, 90, 0.1);
+}
+
+.review-form .form-input::placeholder {
+    color: #bbb;
+}
