@@ -2,6 +2,7 @@
 
 /** @var \core\Router $router */
 
+use app\Controllers\AdminController;
 use app\Controllers\AuthController;
 use app\Controllers\CartController;
 use app\Controllers\HomeController;
@@ -47,8 +48,9 @@ $router->post('/admin/news/{id}/delete', [NewsController::class, 'delete']);
 
 // Відгуки
 $router->post('/catalog/{slug}/reviews', [ReviewController::class, 'store']);
-
-//Адмін — відгуки
 $router->get('/admin/reviews', [ReviewController::class, 'adminIndex']);
 $router->post('/admin/reviews/{id}/approve', [ReviewController::class, 'approve']);
 $router->post('/admin/reviews/{id}/delete', [ReviewController::class, 'delete']);
+$router->post('/admin/reviews/{id}/reply', [ReviewController::class, 'reply']);
+
+$router->get('/admin', [AdminController::class, 'dashboard']);
