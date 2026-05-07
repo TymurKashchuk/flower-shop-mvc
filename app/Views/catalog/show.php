@@ -1,6 +1,9 @@
 <?php
 /** @var array $product */
 /** @var array $categories */
+$reviews     = $reviews ?? [];
+$avgRating   = $avgRating ?? 0.0;
+$hasReviewed = $hasReviewed ?? false;
 ?>
 <div class="product-page">
     <nav class="breadcrumb" aria-label="Навігація">
@@ -126,4 +129,96 @@
             </p>
         </div>
     </div>
+    <!-- Відгуки -->
+    <section class="reviews" aria-labelledby="reviews-title">
+        <div class="reviews__header">
+            <h2 class="reviews__title" id="reviews-title">
+                Відгуки
+                <?php if ($avgRating > 0): ?>
+                    <span class="reviews__avg">
+                    <?= $avgRating ?>
+                    <span class="review-stars review-stars--sm">
+                        <?php
+                        $full = floor($avgRating);
+                        $half = ($avgRating - $full) >= 0.5;
+                        for ($i = 1; $i <= 5; $i++) {
+                            echo $i <= $full ? '★' : ($half && $i == $full + 1 ? '★' : '☆');
+                        }
+                        ?>
+                    </span>
+                    <span class="reviews__count">(<?= count($reviews) ?>)</span>
+                </span>
+                <?php endif; ?>
+            </h2>
+        </div>
+
+        <?php if (!empty($reviews)): ?>
+            <div class="reviews__list">
+                <?php foreach ($reviews as $r): ?>
+                    <div class="review-card">
+                        <div class="review-card__head">
+                            <div class="review-card__avatar">
+                                <?= mb_strtoupper(mb_substr($r['user_name'] ?? 'А', 0, 1)) ?>
+                            </div>
+                            <div>
+                                <strong class="review-card__name">
+                                    <?= htmlspecialchars($r['user_name'] ?? 'Анонім') ?>
+                                </strong>
+                                <time class="review-card__date">
+                                    <?= date('d.m.Y', strtotime($r['created_at'])) ?>
+                                </time>
+                            </div>
+                            <span class="review-stars review-stars--gold">
+                            <?= str_repeat('★', (int)$r['rating']) ?>
+                            <?= str_repeat('☆', 5 - (int)$r['rating']) ?>
+                        </span>
+                        </div>
+                        <p class="review-card__text">
+                            <?= htmlspecialchars($r['text']) ?>
+                        </p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="reviews__empty">Будьте першим, хто залишить відгук!</p>
+        <?php endif; ?>
+
+        <!-- Форма відгуку -->
+        <?php if (!empty($_SESSION['user']) && !$hasReviewed): ?>
+            <div class="review-form-wrap">
+                <h3 class="review-form__title">Залишити відгук</h3>
+                <form class="review-form" method="POST"
+                      action="<?= BASE_URL ?>/catalog/<?= htmlspecialchars($product['slug']) ?>/reviews">
+
+                    <div class="form-group">
+                        <label class="form-label">Оцінка</label>
+                        <div class="star-rating" role="group" aria-label="Оцінка">
+                            <?php for ($i = 5; $i >= 1; $i--): ?>
+                                <input type="radio" name="rating" id="star<?= $i ?>"
+                                       value="<?= $i ?>" required>
+                                <label for="star<?= $i ?>" aria-label="<?= $i ?> зірок">★</label>
+                            <?php endfor; ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-text" class="form-label">Ваш відгук</label>
+                        <textarea id="review-text" name="text" class="form-input"
+                                  rows="4" minlength="5" required
+                                  placeholder="Поділіться враженнями..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Надіслати відгук
+                    </button>
+                </form>
+            </div>
+        <?php elseif (!empty($_SESSION['user']) && $hasReviewed): ?>
+            <p class="reviews__already">Ви вже залишили відгук на цей товар.</p>
+        <?php else: ?>
+            <p class="reviews__login">
+                <a href="<?= BASE_URL ?>/login">Увійдіть</a>, щоб залишити відгук.
+            </p>
+        <?php endif; ?>
+    </section>
 </div>
