@@ -56,6 +56,17 @@
                 </svg>
                 Відгуки
             </a>
+
+            <a href="<?= BASE_URL ?>/admin/users"
+               class="admin-nav__item <?= str_contains($_SERVER['REQUEST_URI'], '/admin/users') ? 'admin-nav__item--active' : '' ?>">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0z"
+                          stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M18 17a6 6 0 10-12 0"
+                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                Користувачі
+            </a>
         </nav>
 
         <div class="admin-sidebar__footer">
