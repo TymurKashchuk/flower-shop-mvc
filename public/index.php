@@ -24,7 +24,8 @@ if (!empty($_SESSION['user'])) {
     if (!$row || (int)$row['is_banned'] === 1) {
         $_SESSION = [];
         session_destroy();
-        header('Location: ' . 'http://coursework.local' . '/login?banned=1');
+        $reason = !$row ? 'deleted' : 'banned';
+        header('Location: http://coursework.local/login?reason=' . $reason);
         exit;
     }
 }

@@ -4,7 +4,7 @@
     <table class="admin-table">
         <thead>
         <tr>
-            <th>Ім'я</th>
+            <th>Імʼя</th>
             <th>Email</th>
             <th>Роль</th>
             <th>Статус</th>
@@ -44,25 +44,37 @@
                 </td>
                 <td>
                     <?php if ($u['role'] !== 'admin'): ?>
-                        <?php if ($u['is_banned']): ?>
+                        <div style="display:flex;gap:var(--space-2)">
+                            <?php if ($u['is_banned']): ?>
+                                <form method="POST"
+                                      action="<?= BASE_URL ?>/admin/users/<?= $u['id'] ?>/unban">
+                                    <button class="btn btn-primary"
+                                            style="padding:4px 12px;font-size:var(--text-sm)">
+                                        Розблокувати
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <form method="POST"
+                                      action="<?= BASE_URL ?>/admin/users/<?= $u['id'] ?>/ban"
+                                      onsubmit="return confirm('Заблокувати користувача?')">
+                                    <button class="btn"
+                                            style="padding:4px 12px;font-size:var(--text-sm);
+                                                   color:var(--color-error);border-color:var(--color-error)">
+                                        Заблокувати
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+
                             <form method="POST"
-                                  action="<?= BASE_URL ?>/admin/users/<?= $u['id'] ?>/unban">
-                                <button class="btn btn-primary"
-                                        style="padding:4px 12px;font-size:var(--text-sm)">
-                                    Розблокувати
-                                </button>
-                            </form>
-                        <?php else: ?>
-                            <form method="POST"
-                                  action="<?= BASE_URL ?>/admin/users/<?= $u['id'] ?>/ban"
-                                  onsubmit="return confirm('Заблокувати користувача?')">
+                                  action="<?= BASE_URL ?>/admin/users/<?= $u['id'] ?>/delete"
+                                  onsubmit="return confirm('Видалити користувача <?= htmlspecialchars($u['name'], ENT_QUOTES) ?>? Це незворотно.')">
                                 <button class="btn"
                                         style="padding:4px 12px;font-size:var(--text-sm);
                                                color:var(--color-error);border-color:var(--color-error)">
-                                    Заблокувати
+                                    Видалити
                                 </button>
                             </form>
-                        <?php endif; ?>
+                        </div>
                     <?php endif; ?>
                 </td>
             </tr>

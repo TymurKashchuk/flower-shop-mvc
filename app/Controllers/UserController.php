@@ -38,6 +38,8 @@ class UserController extends Controller
         }
 
         $this->user->ban((int)$id);
+        $cart = new \app\Models\Cart();
+        $cart->clearByUserId((int)$id);
         $_SESSION['success'] = 'Користувача заблоковано.';
         $this->redirect(BASE_URL . '/admin/users');
     }
@@ -47,6 +49,25 @@ class UserController extends Controller
         Middleware::admin();
         $this->user->unban((int)$id);
         $_SESSION['success'] = 'Користувача розблоковано.';
+        $this->redirect(BASE_URL . '/admin/users');
+    }
+
+    public function delete(string $id): void
+    {
+        Middleware::admin();
+        $user = $this->user->find((int)$id);
+
+        if (!$user || $user['role'] === 'admin') {
+            $_SESSION['error'] = 'Не можна видалити адміна.';
+            $this->redirect(BASE_URL . '/admin/users');
+            return;
+        }
+
+        $cart = new \app\Models\Cart();
+        $cart->clearByUserId((int)$id);
+
+        $this->user->delete((int)$id);
+        $_SESSION['success'] = 'Користувача видалено.';
         $this->redirect(BASE_URL . '/admin/users');
     }
 }

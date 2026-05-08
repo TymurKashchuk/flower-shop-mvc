@@ -62,6 +62,7 @@ $router->get('/admin', [AdminController::class, 'dashboard']);
 $router->get('/admin/users', [UserController::class, 'adminIndex']);
 $router->post('/admin/users/{id}/ban', [UserController::class, 'ban']);
 $router->post('/admin/users/{id}/unban', [UserController::class, 'unban']);
+$router->post('/admin/users/{id}/delete', [UserController::class, 'delete']);
 
 $router->get('/admin/products', [ProductController::class, 'index']);
 $router->get('/admin/products/create', [ProductController::class, 'create']);

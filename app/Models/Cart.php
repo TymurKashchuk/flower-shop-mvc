@@ -158,4 +158,10 @@ class Cart extends Model
     ");
         $stmt->execute([$sessionId]);
     }
+
+    public function clearByUserId(int $userId): bool
+    {
+        $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE user_id = ?");
+        return $stmt->execute([$userId]);
+    }
 }
