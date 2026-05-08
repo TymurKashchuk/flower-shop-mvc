@@ -31,6 +31,18 @@ class Cart extends Model
         return $stmt->fetchAll();
     }
 
+    public function getProductQty(int $productId, string $sessionId, ?int $userId = null): int
+    {
+        [$condition, $params] = $this->getOwnerCondition($userId, $sessionId);
+
+        $stmt = $this->db->prepare("
+        SELECT quantity FROM {$this->table}
+        WHERE {$condition} AND product_id = ?
+    ");
+        $stmt->execute(array_merge($params, [$productId]));
+        return (int)($stmt->fetchColumn() ?: 0);
+    }
+
     public function addItem(string $sessionId, int $productId, int $quantity = 1, ?int $userId = null): bool
     {
         [$condition, $params] = $this->getOwnerCondition($userId, $sessionId);
@@ -126,11 +138,13 @@ class Cart extends Model
             $existing = $check->fetch();
 
             if ($existing) {
-                $upd = $this->db->prepare("
-                UPDATE {$this->table} SET quantity = quantity + ?
-                WHERE id = ?
-            ");
-                $upd->execute([$item['quantity'], $existing['id']]);
+                $stockStmt = $this->db->prepare("SELECT stock FROM products WHERE id = ?");
+                $stockStmt->execute([$item['product_id']]);
+                $stock = (int)$stockStmt->fetchColumn();
+                $newQty = min($existing['quantity'] + $item['quantity'], $stock);
+
+                $upd = $this->db->prepare("UPDATE {$this->table} SET quantity = ? WHERE id = ?");
+                $upd->execute([$newQty, $existing['id']]);
             } else {
                 $upd = $this->db->prepare("
                 UPDATE {$this->table} SET user_id = ? WHERE session_id = ? AND product_id = ? AND user_id IS NULL

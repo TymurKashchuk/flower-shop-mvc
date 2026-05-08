@@ -62,7 +62,21 @@ class CartController extends Controller
             return;
         }
 
-        $quantity = min($quantity, $product['stock']);
+        $alreadyInCart = $this->cart->getProductQty($productId, $this->sessionId, $this->userId);
+        $canAdd = $product['stock'] - $alreadyInCart;
+
+        if ($canAdd <= 0) {
+            $msg = 'Ви вже додали максимальну кількість цього товару.';
+            if ($this->request->isAjax()) {
+                Response::json(['success' => false, 'message' => $msg]);
+                return;
+            }
+            $_SESSION['error'] = $msg;
+            $this->redirect(BASE_URL . '/catalog/' . $product['slug']);
+            return;
+        }
+
+        $quantity = min($quantity, $canAdd);
 
         $this->cart->addItem($this->sessionId, $productId, $quantity, $this->userId);
 
@@ -92,7 +106,13 @@ class CartController extends Controller
 
             if ($cartItem) {
                 $product = $this->product->find($cartItem['product_id']);
-                $quantity = min($quantity, $product['stock'] ?? $quantity);
+                $limitedQty   = min($quantity, $product['stock'] ?? $quantity);
+
+                if ($limitedQty < $quantity) {
+                    $_SESSION['error'] = 'Доступно лише ' . $product['stock'] . ' шт.';
+                }
+
+                $quantity = $limitedQty;
             }
 
             $this->cart->updateQuantity($itemId, $this->sessionId, $quantity, $this->userId);
