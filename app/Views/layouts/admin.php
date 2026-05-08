@@ -57,6 +57,14 @@
                 Відгуки
             </a>
 
+            <a href="<?= BASE_URL ?>/admin/products"
+               class="admin-nav__item <?= str_contains($_SERVER['REQUEST_URI'], '/admin/products') ? 'admin-nav__item--active' : '' ?>">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                Товари
+            </a>
+
             <a href="<?= BASE_URL ?>/admin/users"
                class="admin-nav__item <?= str_contains($_SERVER['REQUEST_URI'], '/admin/users') ? 'admin-nav__item--active' : '' ?>">
                 <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
