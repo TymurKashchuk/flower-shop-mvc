@@ -10,6 +10,7 @@ use app\Controllers\CatalogController;
 use app\Controllers\NewsController;
 use app\Controllers\ReviewController;
 use app\Controllers\UserController;
+use app\Controllers\ProductController;
 
 $router->get('/', [HomeController::class, 'index']);
 
@@ -61,4 +62,11 @@ $router->get('/admin', [AdminController::class, 'dashboard']);
 $router->get('/admin/users', [UserController::class, 'adminIndex']);
 $router->post('/admin/users/{id}/ban', [UserController::class, 'ban']);
 $router->post('/admin/users/{id}/unban', [UserController::class, 'unban']);
+
+$router->get('/admin/products', [ProductController::class, 'index']);
+$router->get('/admin/products/create', [ProductController::class, 'create']);
+$router->post('/admin/products/store', [ProductController::class, 'store']);
+$router->get('/admin/products/{id}/edit', [ProductController::class, 'edit']);
+$router->post('/admin/products/{id}/update', [ProductController::class, 'update']);
+$router->post('/admin/products/{id}/delete', [ProductController::class, 'delete']);
 

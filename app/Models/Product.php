@@ -133,7 +133,7 @@ class Product extends Model
     public function getPaginated(int $page = 1, int $perPage = 9): array
     {
         $offset = ($page - 1) * $perPage;
-        $stmt   = $this->db->prepare("
+        $stmt = $this->db->prepare("
         SELECT p.*, c.name AS category_name, c.slug AS category_slug
         FROM {$this->table} p
         LEFT JOIN categories c ON p.category_id = c.id
@@ -148,7 +148,7 @@ class Product extends Model
     public function countActive(): int
     {
         $stmt = $this->db->query("SELECT COUNT(*) FROM {$this->table} WHERE is_active = 1");
-        return (int) $stmt->fetchColumn();
+        return (int)$stmt->fetchColumn();
     }
 
     public function getFeatured(int $limit = 8): array
@@ -162,6 +162,17 @@ class Product extends Model
         LIMIT ?
         ");
         $stmt->execute([$limit]);
+        return $stmt->fetchAll();
+    }
+
+    public function getAllForAdmin(): array
+    {
+        $stmt = $this->db->query("
+        SELECT p.*, c.name AS category_name
+        FROM {$this->table} p
+        LEFT JOIN categories c ON p.category_id = c.id
+        ORDER BY p.created_at DESC
+    ");
         return $stmt->fetchAll();
     }
 }
