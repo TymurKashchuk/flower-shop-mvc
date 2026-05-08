@@ -5,6 +5,14 @@
 <div class="auth-page">
     <div class="auth-card">
         <h1 class="auth-card__title">Вхід</h1>
+
+        <?php if (isset($_GET['banned'])): ?>
+            <div class="alert alert-error">
+                Ваш акаунт заблоковано. Зверніться до адміністратора.
+                <a href="mailto:admin@flower.com">admin@flower.com</a>
+            </div>
+        <?php endif; ?>
+
         <form class="auth-form" action="<?= BASE_URL ?>/login" method="POST" novalidate>
             <div class="form-group <?= !empty($errors['email']) ? 'form-group--error' : '' ?>">
                 <label for="email" class="form-label">Email</label>
