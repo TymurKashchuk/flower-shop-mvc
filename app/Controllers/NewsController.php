@@ -88,6 +88,7 @@ class NewsController extends Controller
         }
 
         $this->news->create($data);
+        \core\Buffer::clearCache();
         $_SESSION['success'] = 'Новину додано!';
         $this->redirect(BASE_URL . '/admin/news');
     }
@@ -124,6 +125,7 @@ class NewsController extends Controller
         }
 
         $this->news->update((int)$id, $data);
+        \core\Buffer::clearCache();
         $_SESSION['success'] = 'Новину оновлено!';
         $this->redirect(BASE_URL . '/admin/news');
     }
@@ -132,6 +134,7 @@ class NewsController extends Controller
     {
         Middleware::admin();
         $this->news->delete((int)$id);
+        \core\Buffer::clearCache();
         $_SESSION['success'] = 'Новину видалено!';
         $this->redirect(BASE_URL . '/admin/news');
     }
