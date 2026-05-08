@@ -3,6 +3,7 @@
 namespace app\Models;
 
 use core\Model;
+
 class User extends Model
 {
     protected string $table = 'users';
@@ -17,10 +18,10 @@ class User extends Model
     public function create(array $data): bool
     {
         $stmt = $this->db->prepare("INSERT INTO {$this->table} (name,email,password_hash,role) VALUES (?,?,?, 'user')");
-        return $stmt->execute([$data['name'],$data['email'],password_hash($data['password'], PASSWORD_BCRYPT),]);
+        return $stmt->execute([$data['name'], $data['email'], password_hash($data['password'], PASSWORD_BCRYPT),]);
     }
 
-    public function emailExists(string $email,int $excludeId = 0): bool
+    public function emailExists(string $email, int $excludeId = 0): bool
     {
         $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} WHERE email = ? AND id != ?");
         $stmt->execute([$email, $excludeId]);
@@ -34,5 +35,31 @@ class User extends Model
             "UPDATE {$this->table} SET $fields WHERE id = ?"
         );
         return $stmt->execute([...array_values($data), $id]);
+    }
+
+    public function allForAdmin(): array
+    {
+        $stmt = $this->db->query("
+            SELECT id, name, email, role, is_banned, created_at
+            FROM {$this->table}
+            ORDER BY created_at DESC
+        ");
+        return $stmt->fetchAll();
+    }
+
+    public function ban(int $id): bool
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE {$this->table} SET is_banned = 1 WHERE id = ?"
+        );
+        return $stmt->execute([$id]);
+    }
+
+    public function unban(int $id): bool
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE {$this->table} SET is_banned = 0 WHERE id = ?"
+        );
+        return $stmt->execute([$id]);
     }
 }

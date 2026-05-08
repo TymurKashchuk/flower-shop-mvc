@@ -5,7 +5,7 @@
         <p class="hero__desc">Букети, композиції та живі рослини з доставкою по Житомиру</p>
         <div class="hero__actions">
             <a href="<?= BASE_URL ?>/catalog" class="btn btn-primary">Переглянути каталог</a>
-            <a href="<?= BASE_URL ?>/catalog" class="btn btn-ghost">Дізнатись більше</a>
+            <a href="<?= BASE_URL ?>/about" class="btn btn-ghost">Дізнатись більше</a>
         </div>
     </div>
     <div class="hero__image">

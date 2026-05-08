@@ -72,6 +72,14 @@ class Review extends Model
         return $stmt->execute([$id]);
     }
 
+    public function reply(int $id, string $text): bool
+    {
+        $stmt = $this->db->prepare("
+        UPDATE {$this->table} SET admin_reply = ? WHERE id = ?
+    ");
+        return $stmt->execute([$text, $id]);
+    }
+
     public function getAverageRating(int $productId): float
     {
         $stmt = $this->db->prepare("

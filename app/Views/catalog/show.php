@@ -46,7 +46,6 @@ $hasReviewed = $hasReviewed ?? false;
             <?php endif; ?>
         </div>
 
-        <!-- Інформація про товар -->
         <div class="product-page__info">
 
             <?php if (!empty($product['category_name'])): ?>
@@ -176,6 +175,18 @@ $hasReviewed = $hasReviewed ?? false;
                         <p class="review-card__text">
                             <?= htmlspecialchars($r['text']) ?>
                         </p>
+                        <?php if (!empty($r['admin_reply'])): ?>
+                            <div class="review-card__reply">
+                                <div class="review-card__reply-label">
+                                    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" width="14" height="14">
+                                        <path d="M14 2H2v9h3v3l4-3h5V2z" stroke="currentColor"
+                                              stroke-width="1.5" stroke-linejoin="round"/>
+                                    </svg>
+                                    Відповідь магазину
+                                </div>
+                                <p><?= htmlspecialchars($r['admin_reply']) ?></p>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>

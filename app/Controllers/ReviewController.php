@@ -74,7 +74,7 @@ class ReviewController extends Controller
         $this->view('reviews.admin_index', [
             'title' => 'Управління відгуками',
             'items' => $this->review->allForAdmin(),
-        ]);
+        ], 'admin');
     }
 
     public function approve(string $id): void
@@ -90,6 +90,21 @@ class ReviewController extends Controller
         Middleware::admin();
         $this->review->delete((int)$id);
         $_SESSION['success'] = 'Відгук видалено!';
+        $this->redirect(BASE_URL . '/admin/reviews');
+    }
+
+    public function reply(string $id): void
+    {
+        Middleware::admin();
+        $text = trim($this->request->post('reply', ''));
+        if(mb_strlen($text) < 2) {
+            $_SESSION['error'] = 'Відповідь занадто коротка.';
+            $this->redirect(BASE_URL . '/admin/reviews');
+            return;
+        }
+
+        $this->review->reply((int)$id, $text);
+        $_SESSION['success'] = 'Відповідь збережено!';
         $this->redirect(BASE_URL . '/admin/reviews');
     }
 }

@@ -34,7 +34,6 @@
         <nav class="nav" aria-label="Основна навігація">
             <a href="<?= BASE_URL ?>/catalog">Каталог</a>
             <a href="<?= BASE_URL ?>/news">Новини</a>
-            <a href="<?= BASE_URL ?>/gallery">Галерея</a>
         </nav>
 
         <div class="header-actions">

@@ -29,4 +29,11 @@ class HomeController extends Controller
             'categories' => $categories,
         ]);
     }
+
+    public function about(): void
+    {
+        $this->view('home.about', [
+            'title' => 'Про нас',
+        ]);
+    }
 }
