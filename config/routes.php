@@ -9,8 +9,11 @@ use app\Controllers\HomeController;
 use app\Controllers\CatalogController;
 use app\Controllers\NewsController;
 use app\Controllers\ReviewController;
+use app\Controllers\UserController;
 
 $router->get('/', [HomeController::class, 'index']);
+
+$router->get('/about', [HomeController::class, 'about']);
 
 $router->get('/catalog', [CatalogController::class, 'index']);
 $router->get('/catalog/search', [CatalogController::class, 'search']);
@@ -54,3 +57,8 @@ $router->post('/admin/reviews/{id}/delete', [ReviewController::class, 'delete'])
 $router->post('/admin/reviews/{id}/reply', [ReviewController::class, 'reply']);
 
 $router->get('/admin', [AdminController::class, 'dashboard']);
+
+$router->get('/admin/users', [UserController::class, 'adminIndex']);
+$router->post('/admin/users/{id}/ban', [UserController::class, 'ban']);
+$router->post('/admin/users/{id}/unban', [UserController::class, 'unban']);
+
