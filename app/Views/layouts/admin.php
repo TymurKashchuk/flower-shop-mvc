@@ -65,6 +65,15 @@
                 Товари
             </a>
 
+            <a href="<?= BASE_URL ?>/admin/orders"
+               class="admin-nav__item <?= str_contains($_SERVER['REQUEST_URI'], '/admin/orders') ? 'admin-nav__item--active' : '' ?>">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M6 8h8M6 11h8M6 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                Замовлення
+            </a>
+
             <a href="<?= BASE_URL ?>/admin/users"
                class="admin-nav__item <?= str_contains($_SERVER['REQUEST_URI'], '/admin/users') ? 'admin-nav__item--active' : '' ?>">
                 <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -124,6 +133,6 @@
     </div>
 </div>
 
-<script src="<?= BASE_URL ?>/public/assets/js/app.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/app.js"></script>
 </body>
 </html>

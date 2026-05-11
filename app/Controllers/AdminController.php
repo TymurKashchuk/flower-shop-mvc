@@ -31,6 +31,8 @@ class AdminController extends Controller
                 'news' => $db->query("SELECT COUNT(*) FROM news")->fetchColumn(),
                 'reviews' => $db->query("SELECT COUNT(*) FROM reviews")->fetchColumn(),
                 'pending_reviews' => $db->query("SELECT COUNT(*) FROM reviews WHERE is_active = 0")->fetchColumn(),
+                'orders' => $db->query("SELECT COUNT(*) FROM orders")->fetchColumn(),
+                'new_orders' => $db->query("SELECT COUNT(*) FROM orders WHERE status = 'new'")->fetchColumn(),
             ],
         ], 'admin');
     }
