@@ -76,3 +76,7 @@ $router->get('/checkout', [CheckoutController::class, 'index']);
 $router->post('/checkout/store', [CheckoutController::class, 'store']);
 $router->get('/checkout/success', [CheckoutController::class, 'success']);
 
+$router->get('/admin/orders', [\app\Controllers\OrderController::class, 'adminIndex']);
+$router->get('/admin/orders/{id}', [\app\Controllers\OrderController::class, 'adminShow']);
+$router->post('/admin/orders/{id}/status', [\app\Controllers\OrderController::class, 'updateStatus']);
+$router->post('/admin/orders/{id}/delete', [\app\Controllers\OrderController::class, 'delete']);
