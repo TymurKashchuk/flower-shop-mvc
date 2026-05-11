@@ -261,8 +261,37 @@ function initCartCount() {
             const countEl = document.querySelector('.cart-count');
             if (countEl) countEl.textContent = data.count;
         })
-        .catch(() => {});
+        .catch(() => {
+        });
 }
+
+function initDeliveryToggle() {
+    const radios = document.querySelectorAll('input[name="delivery_type"]');
+    if (!radios.length) return;
+
+    const addressGroup = document.getElementById('address-group');
+    const addressInput = document.getElementById('address');
+
+    function toggle(value) {
+        if (value === 'pickup') {
+            addressGroup.style.display = 'none';
+            addressInput.removeAttribute('required');
+        } else {
+            addressGroup.style.display = '';
+            addressInput.setAttribute('required', 'required');
+        }
+    }
+
+    radios.forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            toggle(this.value);
+        });
+    });
+
+    const checked = document.querySelector('input[name="delivery_type"]:checked');
+    if (checked) toggle(checked.value);
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     initProductPage();
@@ -271,4 +300,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initAddToCart();
     initUserMenu();
     initCartCount();
+    initDeliveryToggle();
 });

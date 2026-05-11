@@ -11,6 +11,7 @@ use app\Controllers\NewsController;
 use app\Controllers\ReviewController;
 use app\Controllers\UserController;
 use app\Controllers\ProductController;
+use app\Controllers\CheckoutController;
 
 $router->get('/', [HomeController::class, 'index']);
 
@@ -26,7 +27,7 @@ $router->post('/cart/add', [CartController::class, 'add']);
 $router->post('/cart/update', [CartController::class, 'update']);
 $router->post('/cart/remove', [CartController::class, 'remove']);
 $router->post('/cart/clear', [CartController::class, 'clear']);
-$router->get('cart/count', [\app\Controllers\CartController::class, 'count']);
+$router->get('/cart/count', [\app\Controllers\CartController::class, 'count']);
 
 //login,register
 $router->get('/login', [AuthController::class, 'loginForm']);
@@ -71,3 +72,11 @@ $router->get('/admin/products/{id}/edit', [ProductController::class, 'edit']);
 $router->post('/admin/products/{id}/update', [ProductController::class, 'update']);
 $router->post('/admin/products/{id}/delete', [ProductController::class, 'delete']);
 
+$router->get('/checkout', [CheckoutController::class, 'index']);
+$router->post('/checkout/store', [CheckoutController::class, 'store']);
+$router->get('/checkout/success', [CheckoutController::class, 'success']);
+
+$router->get('/admin/orders', [\app\Controllers\OrderController::class, 'adminIndex']);
+$router->get('/admin/orders/{id}', [\app\Controllers\OrderController::class, 'adminShow']);
+$router->post('/admin/orders/{id}/status', [\app\Controllers\OrderController::class, 'updateStatus']);
+$router->post('/admin/orders/{id}/delete', [\app\Controllers\OrderController::class, 'delete']);
