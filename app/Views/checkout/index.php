@@ -25,25 +25,31 @@
             <div class="form-group">
                 <label class="form-label" for="phone">Телефон</label>
                 <input class="form-input" type="tel" id="phone" name="phone" required
-                       placeholder="+380XXXXXXXXX"
+                       placeholder="093 000 00 00"
+                       maxlength="10"
+                       pattern="[0-9]*"
+                       inputmode="numeric"
                        value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="address-group">
                 <label class="form-label" for="address">Адреса доставки</label>
                 <textarea class="form-input" id="address" name="address" rows="3" required
-                          placeholder="м. Київ, вул. Хрещатик, 1"><?= htmlspecialchars($_POST['address'] ?? '') ?></textarea>
+                          placeholder="м. Київ, вул. Хрещатик, 1" style="resize: none"><?= htmlspecialchars($_POST['address'] ?? '') ?></textarea>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Спосіб доставки</label>
                 <div class="checkout-delivery">
                     <label class="checkout-delivery__option">
-                        <input type="radio" name="delivery_type" value="courier" checked>
+                        <input type="radio" name="delivery_type" value="courier"
+                                <?= (($_POST['delivery_type'] ?? 'courier') === 'courier') ? 'checked' : '' ?>>
                         <span>Кур'єр</span>
                     </label>
+
                     <label class="checkout-delivery__option">
-                        <input type="radio" name="delivery_type" value="pickup">
+                        <input type="radio" name="delivery_type" value="pickup"
+                                <?= (($_POST['delivery_type'] ?? '') === 'pickup') ? 'checked' : '' ?>>
                         <span>Самовивіз</span>
                     </label>
                 </div>
