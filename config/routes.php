@@ -11,6 +11,7 @@ use app\Controllers\NewsController;
 use app\Controllers\ReviewController;
 use app\Controllers\UserController;
 use app\Controllers\ProductController;
+use app\Controllers\CheckoutController;
 
 $router->get('/', [HomeController::class, 'index']);
 
@@ -70,4 +71,8 @@ $router->post('/admin/products/store', [ProductController::class, 'store']);
 $router->get('/admin/products/{id}/edit', [ProductController::class, 'edit']);
 $router->post('/admin/products/{id}/update', [ProductController::class, 'update']);
 $router->post('/admin/products/{id}/delete', [ProductController::class, 'delete']);
+
+$router->get('/checkout', [CheckoutController::class, 'index']);
+$router->post('/checkout/store', [CheckoutController::class, 'store']);
+$router->get('/checkout/success', [CheckoutController::class, 'success']);
 
