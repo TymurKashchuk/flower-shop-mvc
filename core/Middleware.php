@@ -38,7 +38,7 @@ class Middleware
     public static function csrf(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $token = $_POST['_csrf'] ?? '';
+                $token = $_POST['_csrf'] ?? '';
             $sessionToken = $_SESSION['csrf_token'] ?? '';
 
             if (!hash_equals($sessionToken, $token)) {

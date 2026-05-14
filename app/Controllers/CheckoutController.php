@@ -3,6 +3,7 @@
 namespace app\Controllers;
 
 use core\Controller;
+use core\Middleware;
 use core\Request;
 use app\Models\Cart;
 use app\Models\Order;
@@ -19,6 +20,8 @@ class CheckoutController extends Controller
     public function __construct(Request $request)
     {
         parent::__construct($request);
+        Middleware::auth();
+
         $this->cart = new Cart();
         $this->order = new Order();
         $this->orderItem = new OrderItem();
