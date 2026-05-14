@@ -7,8 +7,10 @@
         <h1 class="auth-card__title">Вхід</h1>
 
         <?php if (($_GET['reason'] ?? '') === 'banned'): ?>
-            <div class="alert alert-error">Ваш акаунт заблоковано. Зверніться до адміністратора.</div>
-            <a href="mailto:admin@flower.com">admin@flower.com</a>
+            <div class="alert alert-error">
+                Ваш акаунт заблоковано. Зверніться до адміністратора:
+                <a href="mailto:admin@flower.com" style="color:inherit;font-weight:600">admin@flower.com</a>
+            </div>
         <?php elseif (($_GET['reason'] ?? '') === 'deleted'): ?>
             <div class="alert alert-error">Ваш акаунт було видалено.</div>
         <?php endif; ?>
