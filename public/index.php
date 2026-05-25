@@ -2,12 +2,7 @@
 declare(strict_types=1);
 session_start();
 
-define('ROOT_PATH', dirname(__DIR__));
-define('APP_PATH', ROOT_PATH . '/app');
-define('CACHE_PATH', ROOT_PATH . '/storage/cache');
-define('LOG_PATH', ROOT_PATH . '/storage/logs');
-define('BASE_URL', 'http://coursework.local');
-define('CACHE_TTL', 3600);
+require_once dirname(__DIR__) . '/config/config.php';
 
 spl_autoload_register(function (string $class): void {
     $file = ROOT_PATH . '/' . str_replace('\\', '/', $class) . '.php';
@@ -25,7 +20,7 @@ if (!empty($_SESSION['user'])) {
         $_SESSION = [];
         session_destroy();
         $reason = !$row ? 'deleted' : 'banned';
-        header('Location: http://coursework.local/login?reason=' . $reason);
+        header('Location: ' . BASE_URL . '/login?reason=' . $reason);
         exit;
     }
 }
