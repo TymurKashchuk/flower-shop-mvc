@@ -175,4 +175,17 @@ class Product extends Model
     ");
         return $stmt->fetchAll();
     }
+
+    public function decrementStock(int $id, int $quantity): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE {$this->table}
+            SET stock = stock - ?
+            WHERE id = ? AND stock >= ?
+        ");
+
+        $stmt->execute([$quantity, $id, $quantity]);
+
+        return $stmt->rowCount() > 0;
+    }
 }
