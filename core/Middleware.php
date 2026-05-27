@@ -2,33 +2,31 @@
 
 namespace core;
 
-use core\Response;
-
 class Middleware
 {
     public static function auth(): void
     {
-        if (empty($_SESSION['user'])) {
+        if (empty($_SESSION['user']['id'])) {
             Response::redirect(BASE_URL . '/login');
             return;
         }
 
-        $user = new \app\Models\User();
-        $fresh = $user->find((int)$_SESSION['user']['id']);
+        self::refreshAuthenticatedUser();
+    }
 
-        if (!$fresh || $fresh['is_banned']) {
-            $_SESSION = [];
-            session_destroy();
-            Response::redirect(BASE_URL . '/login?banned=1');
+    public static function syncUserStatus(): void
+    {
+        if (empty($_SESSION['user']['id'])) {
             return;
         }
 
-        $_SESSION['user'] = $fresh;
+        self::refreshAuthenticatedUser();
     }
 
     public static function admin(): void
     {
         self::auth();
+
         if (($_SESSION['user']['role'] ?? '') !== 'admin') {
             Response::redirect(BASE_URL . '/');
             return;
@@ -37,14 +35,16 @@ class Middleware
 
     public static function csrf(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $token = $_POST['_csrf'] ?? '';
-            $sessionToken = $_SESSION['csrf_token'] ?? '';
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+            return;
+        }
 
-            if (!hash_equals($sessionToken, $token)) {
-                Response::setStatus(403);
-                die("CSRF token mismatch");
-            }
+        $token = $_POST['_csrf'] ?? '';
+        $sessionToken = $_SESSION['csrf_token'] ?? '';
+
+        if (!is_string($token) || !is_string($sessionToken) || !hash_equals($sessionToken, $token)) {
+            Response::setStatus(403);
+            exit('CSRF token mismatch');
         }
     }
 
@@ -53,6 +53,24 @@ class Middleware
         if (empty($_SESSION['csrf_token'])) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
+
         return $_SESSION['csrf_token'];
+    }
+
+    private static function refreshAuthenticatedUser(): void
+    {
+        $user = new \app\Models\User();
+        $fresh = $user->find((int)$_SESSION['user']['id']);
+
+        if (!$fresh || (int)($fresh['is_banned'] ?? 0) === 1) {
+            $_SESSION = [];
+            session_destroy();
+
+            $reason = !$fresh ? 'deleted' : 'banned';
+            Response::redirect(BASE_URL . '/login?reason=' . $reason);
+            return;
+        }
+
+        $_SESSION['user'] = $fresh;
     }
 }
