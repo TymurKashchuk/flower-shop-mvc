@@ -3,6 +3,7 @@
 namespace app\Controllers;
 
 use core\Controller;
+use core\Database;
 use core\Middleware;
 use core\Request;
 use app\Models\Cart;
@@ -57,11 +58,11 @@ class CheckoutController extends Controller
             return;
         }
 
-        $name = trim($_POST['name'] ?? '');
-        $phone = trim($_POST['phone'] ?? '');
-        $address = trim($_POST['address'] ?? '');
-        $deliveryType = in_array($_POST['delivery_type'] ?? '', ['courier', 'pickup'], true)
-            ? $_POST['delivery_type']
+        $name = trim((string)$this->request->post('name', ''));
+        $phone = trim((string)$this->request->post('phone', ''));
+        $address = trim((string)$this->request->post('address', ''));
+        $deliveryType = in_array($this->request->post('delivery_type'), ['courier', 'pickup'], true)
+            ? $this->request->post('delivery_type')
             : 'courier';
 
         if ($name === '' || $phone === '') {
@@ -107,35 +108,46 @@ class CheckoutController extends Controller
 
         $total = $this->calculateTotal($items);
 
-        $orderId = $this->order->create([
-            'user_id' => $this->userId,
-            'name' => $name,
-            'phone' => $phone,
-            'address' => $address,
-            'delivery_type' => $deliveryType,
-            'total' => $total,
-        ]);
+        $db = Database::getInstance();
+        $db->beginTransaction();
 
-        $orderItems = array_map(fn($item) => [
-            'product_id' => $item['product_id'],
-            'qty' => $item['quantity'],
-            'price' => $item['price'],
-        ], $items);
+        try {
+            $orderId = $this->order->create([
+                'user_id' => $this->userId,
+                'name' => $name,
+                'phone' => $phone,
+                'address' => $address,
+                'delivery_type' => $deliveryType,
+                'total' => $total,
+            ]);
 
-        $this->orderItem->createBatch($orderId, $orderItems);
+            $orderItems = array_map(fn($item) => [
+                'product_id' => $item['product_id'],
+                'qty' => $item['quantity'],
+                'price' => $item['price'],
+            ], $items);
 
-        foreach ($items as $item) {
-            $success = $this->product->decrementStock((int)$item['product_id'], (int)$item['quantity']);
+            $this->orderItem->createBatch($orderId, $orderItems);
 
-            if (!$success) {
-                $_SESSION['error'] = "На жаль, товар '{$item['name']}' вже недоступний у потрібній кількості.";
-                $this->redirect(BASE_URL . '/cart');
-                return;
+            foreach ($items as $item) {
+                $success = $this->product->decrementStock((int)$item['product_id'], (int)$item['quantity']);
+
+                if (!$success) {
+                    $db->rollBack();
+                    $_SESSION['error'] = "На жаль, товар '{$item['name']}' вже недоступний у потрібній кількості.";
+                    $this->redirect(BASE_URL . '/cart');
+                    return;
+                }
             }
-        }
 
-        //очищаємо кошик
-        $this->cart->clearSession($this->sessionId, $this->userId);
+            $this->cart->clearSession($this->sessionId, $this->userId);
+            $db->commit();
+        } catch (\Throwable $e) {
+            $db->rollBack();
+            $_SESSION['error'] = 'Виникла помилка при оформленні замовлення. Спробуйте пізніше.';
+            $this->redirect(BASE_URL . '/cart');
+            return;
+        }
 
         $this->redirect(BASE_URL . '/checkout/success?order=' . $orderId);
     }

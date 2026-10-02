@@ -62,6 +62,9 @@
         <?php foreach ($products as $product): ?>
             <a href="<?= BASE_URL ?>/catalog/<?= htmlspecialchars($product['slug']) ?>"
                class="product-card">
+                <?php if (($product['stock'] ?? 0) <= 0): ?>
+                    <span class="product-card__badge product-card__badge--out">Немає в наявності</span>
+                <?php endif; ?>
                 <div class="product-card__image">
                     <?php if (!empty($product['image'])): ?>
                         <img

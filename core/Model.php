@@ -23,6 +23,7 @@ abstract class Model
 
     public function all(string $orderBy = 'id', string $dir = 'DESC'): array
     {
+        $orderBy = preg_match('/^[a-zA-Z0-9_]+$/', $orderBy) ? $orderBy : 'id';
         $dir  = strtoupper($dir) === 'ASC' ? 'ASC' : 'DESC';
         $stmt = $this->db->query("SELECT * FROM {$this->table} ORDER BY {$orderBy} {$dir}");
         return $stmt->fetchAll();

@@ -52,7 +52,7 @@ class OrderController extends Controller
     {
         Middleware::admin();
 
-        $status = $_POST['status'] ?? '';
+        $status = (string)$this->request->post('status', '');
         $allowed = ['new', 'processing', 'done', 'cancelled'];
 
         if (in_array($status, $allowed, true)) {

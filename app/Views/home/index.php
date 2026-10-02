@@ -30,6 +30,56 @@
     </div>
 </section>
 
+<section class="features-bar">
+    <div class="features-bar__item">
+        <div class="features-bar__icon">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M12 5V3M12 21v-2M5 12H3M21 12h-2M7.05 7.05L5.64 5.64M18.36 18.36l-1.41-1.41M7.05 16.95l-1.41 1.41M18.36 5.64l-1.41 1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="features-bar__text">
+            <span class="features-bar__title">Свіжі квіти щодня</span>
+            <span class="features-bar__desc">Прямі ранкові поставки з теплиць</span>
+        </div>
+    </div>
+    <div class="features-bar__item">
+        <div class="features-bar__icon">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="2" y="4" width="15" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M17 9h4l2 3v4h-6M6 19a2 2 0 100-4 2 2 0 000 4zM18 19a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="features-bar__text">
+            <span class="features-bar__title">Швидка доставка</span>
+            <span class="features-bar__desc">Кур'єром по місту від 2 годин</span>
+        </div>
+    </div>
+    <div class="features-bar__item">
+        <div class="features-bar__icon">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+        </div>
+        <div class="features-bar__text">
+            <span class="features-bar__title">Фото перед відправкою</span>
+            <span class="features-bar__desc">Узгоджуємо букет у месенджері</span>
+        </div>
+    </div>
+    <div class="features-bar__item">
+        <div class="features-bar__icon">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="features-bar__text">
+            <span class="features-bar__title">Листівка у подарунок</span>
+            <span class="features-bar__desc">Безкоштовно до кожного замовлення</span>
+        </div>
+    </div>
+</section>
+
 <!-- Категорії -->
 <?php if (!empty($categories)): ?>
     <section class="section">
@@ -56,6 +106,9 @@
             <?php foreach ($featured as $product): ?>
                 <a href="<?= BASE_URL ?>/catalog/<?= htmlspecialchars($product['slug']) ?>"
                    class="product-card">
+                    <?php if (($product['stock'] ?? 0) <= 0): ?>
+                        <span class="product-card__badge product-card__badge--out">Немає в наявності</span>
+                    <?php endif; ?>
                     <div class="product-card__image">
                         <?php if (!empty($product['image'])): ?>
                             <img

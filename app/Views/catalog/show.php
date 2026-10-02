@@ -28,7 +28,7 @@ $hasReviewed = $hasReviewed ?? false;
             <?php else: ?>
                 <div class="product-page__no-image" aria-hidden="true">
                     <svg viewBox="0 0 120 120" fill="none">
-                        circle cx="60" cy="60" r="16" fill="currentColor" opacity=".3"/>
+                        <circle cx="60" cy="60" r="16" fill="currentColor" opacity=".3"/>
                         <ellipse cx="60" cy="30" rx="11" ry="19" fill="currentColor" opacity=".2"/>
                         <ellipse cx="60" cy="90" rx="11" ry="19" fill="currentColor" opacity=".2"/>
                         <ellipse cx="30" cy="60" rx="19" ry="11" fill="currentColor" opacity=".2"/>
@@ -71,7 +71,7 @@ $hasReviewed = $hasReviewed ?? false;
             <?php endif; ?>
 
             <!-- Кількість + кошик -->
-            <form class="product-page__order" action="<?= BASE_URL ?>/cart/add" method="POST">
+            <form id="add-to-cart-form" class="product-page__order" action="<?= BASE_URL ?>/cart/add" method="POST">
                 <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
 
                 <div class="quantity-control">
@@ -113,14 +113,14 @@ $hasReviewed = $hasReviewed ?? false;
                 <?= ($product['stock'] ?? 0) > 0 ? 'product-page__stock--in' : 'product-page__stock--out' ?>">
                 <?php if (($product['stock'] ?? 0) > 0): ?>
                     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                        circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
                         <path d="M6.5 10l2.5 2.5 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                               stroke-linejoin="round"/>
                     </svg>
                     В наявності
                 <?php else: ?>
                     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                        circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
                         <path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                     Немає в наявності

@@ -219,7 +219,10 @@ function initAddToCart() {
         })
             .then(r => r.json())
             .then(data => {
-                if (!data.success) return;
+                if (!data.success) {
+                    showToast(data.message ?? 'Помилка');
+                    return;
+                }
 
                 const countEl = document.querySelector('.cart-count');
                 if (countEl) countEl.textContent = data.count;
@@ -293,6 +296,23 @@ function initDeliveryToggle() {
 }
 
 
+function initBackToTop() {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 300) {
+            btn.classList.add('back-to-top--visible');
+        } else {
+            btn.classList.remove('back-to-top--visible');
+        }
+    });
+
+    btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initProductPage();
     initSearch();
@@ -301,4 +321,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initUserMenu();
     initCartCount();
     initDeliveryToggle();
+    initBackToTop();
 });

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@400;500&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css?v=<?= filemtime(ROOT_PATH . '/public/assets/css/style.css') ?>">
 </head>
 <body>
 <header class="header">
@@ -177,6 +177,13 @@
     </div>
 </footer>
 
-<script src="<?= BASE_URL ?>/assets/js/app.js"></script>
+<button id="back-to-top" class="back-to-top" type="button" aria-label="Вгору">
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" width="16" height="16">
+        <path d="M10 15V5M5 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Нагору</span>
+</button>
+
+<script src="<?= BASE_URL ?>/assets/js/app.js?v=<?= filemtime(ROOT_PATH . '/public/assets/js/app.js') ?>"></script>
 </body>
 </html>

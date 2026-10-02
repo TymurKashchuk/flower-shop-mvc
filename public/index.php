@@ -42,7 +42,9 @@ $noCache = $request->method !== 'GET'
     || str_starts_with($request->uri, 'logout')
     || str_starts_with($request->uri, 'admin')
     || str_starts_with($request->uri, 'profile')
-    || !empty($_SESSION['user']);
+    || !empty($_SESSION['user'])
+    || !empty($_SESSION['success'])
+    || !empty($_SESSION['error']);
 
 
 if ($noCache) {
