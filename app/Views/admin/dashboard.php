@@ -43,7 +43,12 @@
                 <?php endif; ?>
             </span>
         </div>
-        <a href="<?= BASE_URL ?>/admin/orders" class="admin-btn admin-btn--sm admin-btn--secondary">Перейти до замовлень &rarr;</a>
+        <a href="<?= BASE_URL ?>/admin/orders" class="admin-btn admin-btn--sm admin-btn--secondary">
+            Перейти до замовлень
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" width="14" height="14">
+                <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
     </div>
 <?php endif; ?>
 
@@ -86,8 +91,15 @@
         <div class="admin-stat-card__content">
             <span class="admin-stat-card__label">Товари в каталозі</span>
             <span class="admin-stat-card__value"><?= $stats['products'] ?></span>
-            <span class="admin-stat-card__meta">
-                <?= $stats['low_stock'] > 0 ? "⚠️ {$stats['low_stock']} закінчуються" : "Всі в наявності" ?>
+            <span class="admin-stat-card__meta" style="display:flex;align-items:center;gap:4px">
+                <?php if ($stats['low_stock'] > 0): ?>
+                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" style="color:var(--admin-warning);flex-shrink:0">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <span><?= $stats['low_stock'] ?> закінчуються</span>
+                <?php else: ?>
+                    <span>Всі в наявності</span>
+                <?php endif; ?>
             </span>
         </div>
         <div class="admin-stat-card__icon-wrap admin-stat-card__icon-wrap--primary">
@@ -128,7 +140,10 @@
                 Останні замовлення
             </h3>
             <a href="<?= BASE_URL ?>/admin/orders" class="admin-btn admin-btn--sm admin-btn--ghost">
-                Всі замовлення &rarr;
+                Всі замовлення
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" width="14" height="14">
+                    <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </a>
         </div>
         
@@ -242,7 +257,12 @@
                     </svg>
                     Останні відгуки
                 </h3>
-                <a href="<?= BASE_URL ?>/admin/reviews" class="admin-btn admin-btn--sm admin-btn--ghost">Всі &rarr;</a>
+                <a href="<?= BASE_URL ?>/admin/reviews" class="admin-btn admin-btn--sm admin-btn--ghost">
+                    Всі
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" width="14" height="14">
+                        <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
             </div>
             <div class="admin-card__body" style="padding:12px 16px;display:flex;flex-direction:column;gap:12px">
                 <?php if (empty($recentReviews)): ?>
@@ -252,8 +272,12 @@
                         <div style="border-bottom:1px solid var(--admin-border-subtle);padding-bottom:10px;display:flex;flex-direction:column;gap:4px">
                             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
                                 <span style="font-size:0.85rem;font-weight:600"><?= htmlspecialchars($rev['user_name'] ?? 'Анонім') ?></span>
-                                <span style="color:#f59e0b;font-size:0.8rem">
-                                    <?= str_repeat('★', (int)$rev['rating']) . str_repeat('☆', 5 - (int)$rev['rating']) ?>
+                                <span style="display:inline-flex;gap:2px;color:#f59e0b" aria-label="<?= (int)$rev['rating'] ?> з 5">
+                                    <?php for ($s = 1; $s <= 5; $s++): ?>
+                                        <svg viewBox="0 0 20 20" fill="<?= $s <= (int)$rev['rating'] ? 'currentColor' : '#e2e8f0' ?>" width="13" height="13">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                    <?php endfor; ?>
                                 </span>
                             </div>
                             <div style="font-size:0.75rem;color:var(--admin-text-muted)">

@@ -22,7 +22,10 @@
         </p>
     </div>
     <a href="<?= BASE_URL ?>/admin/orders" class="admin-btn admin-btn--secondary">
-        &larr; До всіх замовлень
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" width="16" height="16">
+            <path d="M16 10H4m0 0l4-4m-4 4l4 4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        До всіх замовлень
     </a>
 </div>
 
@@ -170,10 +173,10 @@
                     <div class="admin-form-group">
                         <label class="admin-form-label" for="orderStatusSelect">Поточний стан</label>
                         <select name="status" id="orderStatusSelect" class="admin-select" style="margin-bottom:12px">
-                            <option value="new" <?= $order['status'] === 'new' ? 'selected' : '' ?>>🟡 Нове замовлення</option>
-                            <option value="processing" <?= $order['status'] === 'processing' ? 'selected' : '' ?>>🔵 В обробці (збирається)</option>
-                            <option value="done" <?= $order['status'] === 'done' ? 'selected' : '' ?>>🟢 Виконано (доставлено)</option>
-                            <option value="cancelled" <?= $order['status'] === 'cancelled' ? 'selected' : '' ?>>🔴 Скасовано</option>
+                            <option value="new" <?= $order['status'] === 'new' ? 'selected' : '' ?>>Нове замовлення</option>
+                            <option value="processing" <?= $order['status'] === 'processing' ? 'selected' : '' ?>>В обробці (збирається)</option>
+                            <option value="done" <?= $order['status'] === 'done' ? 'selected' : '' ?>>Виконано (доставлено)</option>
+                            <option value="cancelled" <?= $order['status'] === 'cancelled' ? 'selected' : '' ?>>Скасовано</option>
                         </select>
                     </div>
 

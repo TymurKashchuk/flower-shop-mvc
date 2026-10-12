@@ -26,7 +26,10 @@ $currentImage = $old['image'] ?? $item['image'] ?? '';
             На вітрині
         </a>
         <a href="<?= BASE_URL ?>/admin/products" class="admin-btn admin-btn--secondary">
-            &larr; До списку
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" width="16" height="16">
+                <path d="M16 10H4m0 0l4-4m-4 4l4 4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            До списку
         </a>
     </div>
 </div>

@@ -183,6 +183,83 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('change', updatePreview);
     });
 
+    // -------------------------------------------------------------------------
+    // 6. Review Reply Modal with Blurred Backdrop
+    // -------------------------------------------------------------------------
+    const replyModal = document.getElementById('reviewReplyModal');
+    const replyBackdrop = document.getElementById('reviewReplyBackdrop');
+    const replyForm = document.getElementById('reviewReplyForm');
+    const replyAuthor = document.getElementById('modalReplyAuthor');
+    const replyProduct = document.getElementById('modalReplyProduct');
+    const replyRating = document.getElementById('modalReplyRating');
+    const replyQuote = document.getElementById('modalReplyQuote');
+    const replyTextarea = document.getElementById('modalReplyTextarea');
+
+    function openReplyModal(btn) {
+        if (!replyModal || !replyBackdrop) return;
+
+        const userName = btn.getAttribute('data-user-name') || 'Анонім';
+        const productName = btn.getAttribute('data-product-name') || '—';
+        const rating = parseInt(btn.getAttribute('data-rating') || '5', 10);
+        const reviewText = btn.getAttribute('data-review-text') || '';
+        const replyText = btn.getAttribute('data-reply-text') || '';
+        const actionUrl = btn.getAttribute('data-action-url') || '';
+
+        if (replyForm) {
+            replyForm.action = actionUrl;
+        }
+
+        if (replyAuthor) replyAuthor.textContent = userName;
+        if (replyProduct) replyProduct.textContent = productName;
+        if (replyRating) {
+            replyRating.innerHTML = Array.from({length: 5}, (_, i) => `
+                <svg viewBox="0 0 20 20" fill="${i < rating ? 'currentColor' : '#e2e8f0'}" width="15" height="15" style="vertical-align:middle">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+            `).join('');
+        }
+        if (replyQuote) replyQuote.textContent = reviewText;
+        if (replyTextarea) {
+            replyTextarea.value = replyText;
+        }
+
+        replyBackdrop.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        setTimeout(() => {
+            replyTextarea?.focus();
+            if (replyTextarea) {
+                replyTextarea.selectionStart = replyTextarea.selectionEnd = replyTextarea.value.length;
+            }
+        }, 150);
+    }
+
+    function closeReplyModal() {
+        if (!replyBackdrop) return;
+        replyBackdrop.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.btn-open-reply-modal').forEach(btn => {
+        btn.addEventListener('click', () => openReplyModal(btn));
+    });
+
+    document.querySelectorAll('[data-close-reply-modal]').forEach(btn => {
+        btn.addEventListener('click', closeReplyModal);
+    });
+
+    replyBackdrop?.addEventListener('click', (e) => {
+        if (e.target === replyBackdrop) {
+            closeReplyModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && replyBackdrop?.classList.contains('active')) {
+            closeReplyModal();
+        }
+    });
+
     function escapeHtml(str) {
         return str.replace(/[&<>'"]/g, tag => ({
             '&': '&amp;',
@@ -193,3 +270,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }[tag] || tag));
     }
 });
+
