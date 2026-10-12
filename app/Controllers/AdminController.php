@@ -42,8 +42,9 @@ class AdminController extends Controller
 
         // Recent reviews that may require attention
         $recentReviews = $db->query("
-            SELECT r.id, r.user_name, r.rating, r.text, r.is_active, r.created_at, p.name AS product_name 
+            SELECT r.id, COALESCE(u.name, 'Анонім') AS user_name, r.rating, r.text, r.is_active, r.created_at, p.name AS product_name 
             FROM reviews r 
+            LEFT JOIN users u ON u.id = r.user_id
             LEFT JOIN products p ON p.id = r.product_id 
             ORDER BY r.is_active ASC, r.id DESC 
             LIMIT 4
